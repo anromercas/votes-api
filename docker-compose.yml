@@ -1,0 +1,46 @@
+# Define the services/ containers to be run
+version: "3.7"
+
+services:
+  # The main service
+  votes-app:
+    build: 
+      context: ../votes-app
+      dockerfile: Dockerfile
+    networks:
+      - votes_app_network
+    ports:
+      - 4202:4202
+    volumes:
+      - ../votes-app/src:/src/src
+
+  votes-api:
+    command: ["npm", "run", "dev"]
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mongo
+    networks:
+      - votes_app_network
+    ports:
+      - 3002:3002
+    volumes:
+      - .:/src
+    expose:
+      - 3002
+  
+  mongo:
+    image: mongo
+    networks:
+      - votes_app_network
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data/mongo:/data/db
+    expose:
+      - 27017
+
+networks:
+  votes_app_network:
+    driver: bridge

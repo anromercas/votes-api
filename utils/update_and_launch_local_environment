@@ -1,0 +1,15 @@
+#! /bin/bash
+echo "Cambiando a la rama main del proyecto votes-api"
+git checkout main
+echo "Actualizando rama main del proyecto votes-api"
+git pull
+echo "Actualización del proyecto votes-api terminada"
+
+echo "Cambiando a la rama main del proyecto votes-app"
+git -C ../app checkout main
+echo "Actualizando rama main del proyecto votes-app"
+git -C ../app pull
+echo "Actualización del proyecto votes-app terminada"
+
+echo "Lanzando el entorno local rama develop"
+docker-compose -f docker-compose.yml up --build
